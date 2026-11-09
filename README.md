@@ -1,31 +1,36 @@
-# Liga DS | Controle Financeiro
+# Liga DS | Caixa (app Streamlit)
 
-App Streamlit com a visão financeira dos eventos da Liga. **Os dados não ficam neste repositório** (ele é público): o app lê de um Google Sheets privado.
+Painel financeiro da Liga: caixa, resultado por evento, para onde vai o dinheiro, reserva de emergência, planejamento de orçamento e qualidade dos dados.
+**Os dados não ficam neste repositório** (ele é público): o app lê de um Google Sheets privado.
 
-## 1. Rodar no seu computador (desenvolvimento)
-1. `pip install -r requirements.txt`
-2. Crie a pasta `data/` e coloque dentro o `fluxo_de_caixa.csv` gerado pelo notebook (a pasta é ignorada pelo git).
-3. `streamlit run app.py`
+## Páginas (4, com abas)
+| Página | Abas | Pergunta que responde |
+|---|---|---|
+| Resumo | | Estamos bem? Caixa, eventos cobertos, resultado do ano, alertas |
+| Eventos | Por evento, Categorias | Cada evento deu retorno? Para onde vai o dinheiro? |
+| Caixa e planejamento | Reserva, Planejar evento | O caixa aguenta um evento grande? Quanto reservar para o próximo? |
+| Análises e dados | Regressão, Qualidade, Lançar | O que os dados dizem (com honestidade), o que falta validar, registrar movimentações |
 
-## 2. Criar a base privada no Google Sheets (uma vez)
-1. Crie uma planilha no Google Drive chamada `Liga DS Financeiro` e renomeie a primeira aba para **`movimentacoes`**.
-2. Arquivo > Importar > Upload > `fluxo_de_caixa.csv` > "Substituir planilha atual". Colunas obrigatórias: `data, tipo, valor, evento, categoria, descricao, confirmar, natureza` (as demais são ignoradas).
-3. No [Google Cloud Console](https://console.cloud.google.com): crie um projeto > ative **Google Sheets API** e **Google Drive API** > Credenciais > Criar **conta de serviço** > aba Chaves > Adicionar chave > JSON (baixa um arquivo).
-4. Abra o JSON, copie o campo `client_email`, e **compartilhe a planilha** com esse e-mail (permissão de Leitor).
-5. Copie o ID da planilha (trecho entre `/d/` e `/edit` na URL).
+## Estrutura
+```
+app.py              entrada: senha, navegação, moldura
+views/              as 4 páginas (finas, só montam as abas)
+secoes/             o conteúdo de cada aba
+core/config.py      regras de negócio (tipos de evento, anos excluídos, cores)
+core/data.py        leitura dos dados e métricas
+core/ui.py          formatação, estilo dos gráficos e helper de abas
+.streamlit/config.toml   tema
+```
 
-### Aba `saldo` (saldo da caixinha)
-Crie uma segunda aba chamada **`saldo`** com as colunas `data, bruto, liquido` (ex.: `2026-10-18, 2307.47, 2269.65`). O app mostra a última linha. Atualize sempre que olhar o saldo no app do banco.
+## Dados no Google Sheets (planilha privada)
+Aba **`movimentacoes`** com as colunas `data, tipo, valor, evento, categoria, descricao, confirmar, natureza` (use o `fluxo_de_caixa.csv` gerado pelo notebook).
+Aba **`saldo`** com `data, bruto, liquido` (ex.: `2026-10-18, 2307.47, 2269.65`). O app mostra a última linha.
 
-## 3. Publicar no Streamlit Community Cloud
-1. Suba este repositório no GitHub (público, **sem** a pasta `data/`).
-2. Em [share.streamlit.io](https://share.streamlit.io): New app > escolha o repositório, branch `main`, arquivo `app.py`.
-3. Em Advanced settings > Secrets, cole (trocando pelos seus valores; o bloco `gcp_service_account` é o conteúdo do JSON em formato TOML):
-
+## Secrets (Streamlit Cloud > Settings > Secrets)
 ```toml
 sheet_id = "ID_DA_PLANILHA"
-aba = "movimentacoes"
-app_password = "escolha-uma-senha"
+app_password = "UMA_SENHA_FORTE"
+# permitir_escrita = true     # só se a conta de serviço for Editora da planilha (ver abaixo)
 
 [gcp_service_account]
 type = "service_account"
@@ -36,13 +41,25 @@ client_email = "...@....iam.gserviceaccount.com"
 client_id = "..."
 token_uri = "https://oauth2.googleapis.com/token"
 ```
-4. Deploy. O link só abre com a senha. Os dados são relidos da planilha a cada 5 minutos.
 
-## 4. Como alimentar a base daqui pra frente
-Quem cuida do caixa adiciona uma linha por movimentação na aba `movimentacoes` (data no formato AAAA-MM-DD; `tipo` = Entrada ou Saída; `natureza` = Receita, Despesa, Reembolso ou Adiantamento; `confirmar` = TRUE se ainda não foi validado). Não precisa mexer no código.
+## Lançamento pelo app (opcional)
+Por padrão o app só **lê**. Para a página *Lançar movimentação* gravar direto na planilha:
+1. Compartilhe a planilha com o e-mail da conta de serviço como **Editor** (em vez de Leitor).
+2. Adicione `permitir_escrita = true` nos Secrets.
+Sem isso, a página gera a linha pronta para colar na aba `movimentacoes`.
+
+## Rodar no computador
+1. `pip install -r requirements.txt`
+2. Crie a pasta `data/` com `fluxo_de_caixa.csv` e `saldo.csv` (colunas `data,bruto,liquido`). A pasta é ignorada pelo git.
+3. `streamlit run app.py`
+
+## Atualizar um app que já está publicado
+No GitHub: **Add file > Upload files**, arraste `app.py`, `requirements.txt`, `README.md` e as pastas `core`, `views`, `secoes` e `.streamlit` (apague antes do repo os arquivos antigos de `views/`: categorias, planejar, analises, lancar, qualidade) e clique em **Commit changes**. O Streamlit Cloud reimplanta sozinho em 1 a 2 minutos. Não suba a pasta `data/`.
 
 ## Decisões de modelagem
 - 2023 fica fora das análises (custos não registrados).
-- Camisetas (Reembolso/Adiantamento) ficam fora das análises por evento e aparecem na aba própria.
-- "Lucro" informado = valor líquido; a receita bruta é reconstruída somando as despesas do evento (feito no notebook).
-- A regressão é exploratória: poucos eventos não permitem previsão.
+- Camisetas (adiantamento e reembolso) ficam fora das análises por evento e aparecem em *Caixa e reserva*.
+- "Lucro" informado (Festa Junina 2026, Calourada 2026) é líquido: a receita bruta é reconstruída somando as despesas.
+- O tipo de cada evento (arrecadação, formação, membros, operação) está em `core/config.py` e deve ser validado pela Diretoria.
+- O caixa é o saldo informado no app do banco, não a soma dos lançamentos, porque a caixinha rende.
+- A regressão é exploratória: poucos eventos não permitem previsão. A página mostra o intervalo de confiança e compara com o chute da média.
