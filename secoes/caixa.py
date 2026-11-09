@@ -8,7 +8,7 @@ from core.ui import brl, style, cabecalho, md, tabela
 
 D = get_dados()
 ev, df = D.ev, D.df
-cabecalho("Caixa e reserva de emergência", "Se chegar um evento grande e a receita não vier, o caixa aguenta?")
+cabecalho("Caixa e reserva de emergência", "Ajuste a meta de reserva e compare com o caixa atual.")
 
 caixa = D.saldo["liquido"] if D.saldo else st.number_input("Saldo líquido da caixinha (R$)", min_value=0.0, value=0.0, step=50.0)
 maior = maior_gasto_evento(ev)

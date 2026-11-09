@@ -28,7 +28,7 @@ else:
     band = t * s * np.sqrt(1 / n + (xs - x.mean()) ** 2 / sxx)
 
     fig = go.Figure()
-    fig.add_scatter(x=np.r_[xs, xs[::-1]], y=np.r_[yhat + band, (yhat - band)[::-1]], fill="toself", fillcolor="rgba(90,63,192,0.12)",
+    fig.add_scatter(x=np.r_[xs, xs[::-1]], y=np.r_[yhat + band, (yhat - band)[::-1]], fill="toself", fillcolor="rgba(12,105,128,0.13)",
                     line=dict(width=0), hoverinfo="skip", name="Intervalo de 95% da reta")
     fig.add_scatter(x=xs, y=yhat, mode="lines", line=dict(color=TEAL, dash="dash"), name="Reta de regressão")
     fig.add_scatter(x=x, y=y, mode="markers+text", text=pts.evento, textposition="top center", textfont=dict(size=11),
@@ -64,11 +64,11 @@ else:
 st.subheader("Gasto por participante")
 st.caption("Preencha os participantes (Data Journey: inscritos/presentes no Drive; Festa Junina: estimativa por corn dogs/waffles vendidos). Os números ficam só nesta sessão.")
 base = ev[ev.despesa > 0][["evento", "despesa"]].copy()
-base["participantes"] = np.nan
+base["participantes"] = 0
 ed = st.data_editor(base, disabled=["evento", "despesa"], hide_index=True, width="stretch", key="part",
                     column_config={"evento": "Evento", "despesa": st.column_config.NumberColumn("Despesa (R$)", format="localized"),
-                                   "participantes": st.column_config.NumberColumn("Participantes", min_value=1, step=1)})
-ok = ed.dropna(subset=["participantes"])
+                                   "participantes": st.column_config.NumberColumn("Participantes", min_value=0, step=1, format="%d", help="Deixe 0 enquanto não souber")})
+ok = ed[ed["participantes"] > 0]
 if len(ok):
     ok = ok.assign(por_pessoa=ok.despesa / ok.participantes)
     f2 = go.Figure(go.Bar(x=ok.evento, y=ok.por_pessoa, marker_color=TEAL, text=[brl(v) for v in ok.por_pessoa], textposition="outside"))

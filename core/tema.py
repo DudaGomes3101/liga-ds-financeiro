@@ -37,6 +37,9 @@ div[data-testid="stMetricValue"] {{ font-family:'Poppins',Arial,sans-serif; font
 [data-testid="stVerticalBlockBorderWrapper"]:has(> div > [data-testid="stMetric"]) {{ border-top:4px solid var(--am); border-radius:14px; background:#fff; box-shadow:0 2px 8px rgba(12,105,128,.08); }}
 [data-testid="stVerticalBlockBorderWrapper"] {{ border-radius:14px; }}
 
+[data-testid="stMetric"] {{ min-height:104px; }}
+.hero h1 a, .hero [data-testid="stHeaderActionElements"] {{ display:none !important; }}
+
 /* barra lateral */
 [data-testid="stSidebar"] {{ background:linear-gradient(180deg,{TEAL} 0%, #0A5468 100%); }}
 [data-testid="stSidebar"] * {{ color:#EAF6F9; }}

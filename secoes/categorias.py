@@ -29,7 +29,7 @@ if tot and pend / tot > 0.15:
 paleta = [TEAL, TEAL_L, AMARELO, AMARELO_L, "#5F7480", "#8FA3AD", "#BFDCE6", "#2B3A42"]
 tm = d.groupby(["categoria", "descricao"], as_index=False).valor.sum()
 fig = px.treemap(tm, path=[px.Constant("Despesas"), "categoria", "descricao"], values="valor", color="categoria", color_discrete_sequence=paleta)
-fig.update_traces(textinfo="label+value", texttemplate="%{label}<br>R$ %{value:,.0f}", marker=dict(cornerradius=4), root_color="#FAFAFC")
+fig.update_traces(textinfo="label+value", texttemplate="%{label}<br>R$ %{value:,.0f}", marker=dict(cornerradius=4), root_color="#F0F7FA")
 fig.update_layout(title="Despesas por categoria e item (clique para entrar)", uniformtext=dict(minsize=11, mode="hide"))
 st.plotly_chart(style(fig, 460, legenda=False), width="stretch")
 

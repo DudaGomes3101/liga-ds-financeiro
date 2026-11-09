@@ -8,7 +8,7 @@ from core.ui import brl, style, cabecalho, aviso_confianca, tabela
 
 D = get_dados()
 ev, df = D.ev, D.df
-cabecalho("Eventos", "Quanto cada evento arrecadou, gastou e deixou de resultado.")
+cabecalho("Eventos", "Filtre por tipo de evento e ano. Abaixo da tabela, o raio-X de cada evento.")
 
 # ---- filtros
 f1, f2 = st.columns([3, 2])
