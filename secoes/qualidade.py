@@ -1,4 +1,5 @@
 import streamlit as st
+from core.config import TEAL, TEAL_L, AMARELO, AMARELO_L, TINTA, CINZA, CINZA_CLARO, VERDE, VERMELHO, PERFIL_COR
 from core.config import CAT_PENDENTES
 from core.data import get_dados, segredo, S
 from core.ui import brl, cabecalho, tabela

@@ -17,12 +17,16 @@ PERFIL_POR_FAMILIA = {
 }
 PERFIL_PADRAO = "A classificar"
 
-ROXO = "#5A3FC0"
-CINZA = "#9AA0B4"
-CINZA_CLARO = "#D9DCE8"
+TEAL = "#0C6980"          # cor secundária da marca (principal do app)
+TEAL_L = "#3891AC"        # apoio
+AMARELO = "#FED531"       # cor principal da marca (destaque)
+AMARELO_L = "#FFE684"     # apoio
+TINTA = "#0F2A33"         # texto escuro (preto da marca suavizado)
+CINZA = "#8FA3AD"
+CINZA_CLARO = "#D5E3E8"
 VERDE = "#2E7D5B"
-VERMELHO = "#C0504D"
-PERFIL_COR = {"Arrecadação": ROXO, "Formação": CINZA, "Membros": "#B7A6E8", "Operação": "#6B7390", PERFIL_PADRAO: CINZA_CLARO}
+VERMELHO = "#E4572E"
+PERFIL_COR = {"Arrecadação": TEAL, "Formação": AMARELO, "Membros": TEAL_L, "Operação": "#5F7480", PERFIL_PADRAO: CINZA_CLARO}
 CAT_PENDENTES = ["A detalhar", "A confirmar"]
 
 

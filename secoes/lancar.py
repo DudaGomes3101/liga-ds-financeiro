@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from core.config import TEAL, TEAL_L, AMARELO, AMARELO_L, TINTA, CINZA, CINZA_CLARO, VERDE, VERMELHO, PERFIL_COR
 from core.config import COLUNAS
 from core.data import get_dados, segredo
 from core.ui import tabela

@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-from core.config import ROXO
+from core.config import TEAL, TEAL_L, AMARELO, AMARELO_L, TINTA, CINZA, CINZA_CLARO, VERDE, VERMELHO, PERFIL_COR
+from core.config import TEAL
 from core.data import get_dados, S
 from core.ui import brl, style, cabecalho
 

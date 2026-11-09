@@ -3,7 +3,8 @@
 import streamlit as st
 from core.data import segredo, get_dados
 
-st.set_page_config(page_title="Liga DS | Caixa", page_icon=":material/account_balance_wallet:", layout="wide", initial_sidebar_state="expanded")
+from core.tema import aplicar, LOGO, FAVICON
+st.set_page_config(page_title="Liga DS | Caixa", page_icon=str(FAVICON) if FAVICON.exists() else ":material/account_balance_wallet:", layout="wide", initial_sidebar_state="expanded")
 
 
 def gate():
@@ -12,8 +13,8 @@ def gate():
         return
     _, c, _ = st.columns([1, 1.2, 1])
     with c:
-        st.title("Liga DS | Caixa")
-        st.caption("Acesso restrito à Diretoria.")
+        from core.tema import banner
+        banner("Liga DS | Caixa", "Acesso restrito à Diretoria.")
         tent = st.text_input("Senha", type="password")
         if tent:
             if tent == senha:
@@ -23,16 +24,10 @@ def gate():
     st.stop()
 
 
+aplicar()
 gate()
-
-st.markdown("""
-<style>
-[data-testid="stMetricValue"] {font-size: 1.7rem;}
-[data-testid="stMetricLabel"] p {font-size: .85rem; color:#5B6178;}
-h1 {font-weight: 700; letter-spacing:-0.5px;}
-.block-container {padding-top: 2.2rem; max-width: 1250px;}
-</style>
-""", unsafe_allow_html=True)
+if LOGO.exists():
+    st.logo(str(LOGO), size="large")
 
 pg = st.navigation([
     st.Page("views/resumo.py", title="Resumo", icon=":material/dashboard:", default=True),

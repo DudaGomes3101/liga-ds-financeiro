@@ -11,6 +11,10 @@ Painel financeiro da Liga: caixa, resultado por evento, para onde vai o dinheiro
 | Caixa e planejamento | Reserva, Planejar evento | O caixa aguenta um evento grande? Quanto reservar para o próximo? |
 | Análises e dados | Regressão, Qualidade, Lançar | O que os dados dizem (com honestidade), o que falta validar, registrar movimentações |
 
+## Identidade visual
+Cores, fontes e logo seguem o Manual da Marca da Liga (azul #0C6980, amarelo #FED531, apoio #3891AC e #FFE684; títulos Poppins, subtítulos Inria Serif, texto Arial). O visual vem de `core/tema.py` e `assets/`, e **não depende** da pasta oculta `.streamlit`.
+Para as cores de filtros e controles ficarem 100% na marca, crie também o arquivo `.streamlit/config.toml` (copie o conteúdo de `tema_config.toml`): no GitHub, **Add file > Create new file**, digite `.streamlit/config.toml` como nome e cole o conteúdo.
+
 ## Estrutura
 ```
 app.py              entrada: senha, navegação, moldura
@@ -19,6 +23,8 @@ secoes/             o conteúdo de cada aba
 core/config.py      regras de negócio (tipos de evento, anos excluídos, cores)
 core/data.py        leitura dos dados e métricas
 core/ui.py          formatação, estilo dos gráficos e helper de abas
+core/tema.py        identidade visual (CSS, banner, logo)
+assets/             logo e favicon da Liga
 .streamlit/config.toml   tema
 ```
 

@@ -2,8 +2,9 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+from core.config import TEAL, TEAL_L, AMARELO, AMARELO_L, TINTA, CINZA, CINZA_CLARO, VERDE, VERMELHO, PERFIL_COR
 from scipy import stats
-from core.config import ROXO, PERFIL_COR, CINZA
+from core.config import TEAL, PERFIL_COR, CINZA
 from core.data import get_dados, S
 from core.ui import brl, style, cabecalho
 
@@ -29,7 +30,7 @@ else:
     fig = go.Figure()
     fig.add_scatter(x=np.r_[xs, xs[::-1]], y=np.r_[yhat + band, (yhat - band)[::-1]], fill="toself", fillcolor="rgba(90,63,192,0.12)",
                     line=dict(width=0), hoverinfo="skip", name="Intervalo de 95% da reta")
-    fig.add_scatter(x=xs, y=yhat, mode="lines", line=dict(color=ROXO, dash="dash"), name="Reta de regressão")
+    fig.add_scatter(x=xs, y=yhat, mode="lines", line=dict(color=TEAL, dash="dash"), name="Reta de regressão")
     fig.add_scatter(x=x, y=y, mode="markers+text", text=pts.evento, textposition="top center", textfont=dict(size=11),
                     marker=dict(size=11, color=[PERFIL_COR.get(p, CINZA) for p in pts.perfil], line=dict(color="white", width=1)), name="Eventos",
                     hovertemplate="<b>%{text}</b><br>Despesa: R$ %{x:,.2f}<br>Receita: R$ %{y:,.2f}<extra></extra>")
@@ -70,6 +71,6 @@ ed = st.data_editor(base, disabled=["evento", "despesa"], hide_index=True, width
 ok = ed.dropna(subset=["participantes"])
 if len(ok):
     ok = ok.assign(por_pessoa=ok.despesa / ok.participantes)
-    f2 = go.Figure(go.Bar(x=ok.evento, y=ok.por_pessoa, marker_color=ROXO, text=[brl(v) for v in ok.por_pessoa], textposition="outside"))
+    f2 = go.Figure(go.Bar(x=ok.evento, y=ok.por_pessoa, marker_color=TEAL, text=[brl(v) for v in ok.por_pessoa], textposition="outside"))
     f2.update_layout(title="Despesa por participante (R$)")
     st.plotly_chart(style(f2, 340, legenda=False), width="stretch")

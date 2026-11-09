@@ -1,7 +1,8 @@
 import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
-from core.config import ROXO, CINZA_CLARO, VERDE, VERMELHO
+from core.config import TEAL, TEAL_L, AMARELO, AMARELO_L, TINTA, CINZA, CINZA_CLARO, VERDE, VERMELHO, PERFIL_COR
+from core.config import TEAL, CINZA_CLARO, VERDE, VERMELHO
 from core.data import get_dados, camisetas, maior_gasto_evento, reserva_alvo, gasto_por_ano
 from core.ui import brl, style, cabecalho, md, tabela
 
@@ -28,14 +29,14 @@ alvo = reserva_alvo(ev, df, "evento" if metodo != "Meses de gasto" else "meses",
 gap = caixa - alvo
 fig = go.Figure(go.Indicator(
     mode="gauge", value=caixa,
-    gauge=dict(shape="bullet", axis=dict(range=[0, max(caixa, alvo) * 1.25 or 1]), bar=dict(color=ROXO, thickness=0.5),
-               threshold=dict(line=dict(color="#1F2430", width=4), thickness=0.85, value=alvo),
-               steps=[dict(range=[0, alvo * 0.5], color="#C9CCDA"), dict(range=[alvo * 0.5, alvo], color="#E1E3EC"),
-                      dict(range=[alvo, max(caixa, alvo) * 1.25 or 1], color="#F1F2F7")])))
+    gauge=dict(shape="bullet", axis=dict(range=[0, max(caixa, alvo) * 1.25 or 1]), bar=dict(color=TEAL, thickness=0.5),
+               threshold=dict(line=dict(color=TINTA, width=4), thickness=0.85, value=alvo),
+               steps=[dict(range=[0, alvo * 0.5], color="#BFDCE6"), dict(range=[alvo * 0.5, alvo], color="#DCEDF3"),
+                      dict(range=[alvo, max(caixa, alvo) * 1.25 or 1], color="#F0F7FA")])))
 fig.update_layout(height=130, margin=dict(l=20, r=20, t=10, b=20), paper_bgcolor="rgba(0,0,0,0)")
-st.markdown("**Caixa líquido (barra roxa) contra a meta (traço escuro)**")
+st.markdown("**Caixa líquido (barra azul) contra a meta (traço escuro)**")
 st.plotly_chart(fig, width="stretch")
-st.caption("Barra roxa = caixa atual. Traço escuro = meta. Faixas: abaixo de 50% da meta, entre 50% e 100%, e acima da meta.")
+st.caption("Barra azul = caixa atual. Traço escuro = meta. Faixas: abaixo de 50% da meta, entre 50% e 100%, e acima da meta.")
 
 m = st.columns(4)
 m[0].metric("Caixa líquido", brl(caixa), border=True)
@@ -45,7 +46,7 @@ fj = ev[(ev.familia == "Festa Junina")]
 if gap < 0 and len(fj) and fj.resultado.mean() > 0:
     m[3].metric("Equivale a", f"{abs(gap) / fj.resultado.mean():.1f} Festas Juninas".replace(".", ","), f"lucro médio {brl(fj.resultado.mean())}", delta_color="off", border=True)
 elif maior:
-    m[3].metric("Eventos cobertos", f"{caixa / maior:.1f}".replace(".", ","), f"maior evento = {brl(maior)}", delta_color="off", border=True)
+    m[3].metric("Eventos cobertos", f"{caixa / maior:.1f}".replace(".", ","), f"maior: {brl(maior)}", delta_color="off", border=True)
 
 with st.expander("Como a meta é calculada"):
     st.markdown(md(f"""
@@ -57,7 +58,7 @@ with st.expander("Como a meta é calculada"):
 
 st.subheader("Gasto por evento")
 g = ev[ev.despesa > 0].sort_values("despesa")
-f2 = go.Figure(go.Bar(y=g.evento, x=g.despesa, orientation="h", marker_color=[ROXO if v == g.despesa.max() else "#B8BCCB" for v in g.despesa]))
+f2 = go.Figure(go.Bar(y=g.evento, x=g.despesa, orientation="h", marker_color=[TEAL if v == g.despesa.max() else AMARELO for v in g.despesa]))
 f2.update_layout(title="Despesa por evento (R$): o maior define a reserva", yaxis=dict(autorange=True))
 st.plotly_chart(style(f2, max(320, 26 * len(g) + 80), legenda=False), width="stretch")
 

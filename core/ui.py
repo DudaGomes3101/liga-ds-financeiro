@@ -32,8 +32,8 @@ def pct(v, d=0):
 def style(fig: go.Figure, h=380, legenda=True):
     fig.update_layout(
         height=h, margin=dict(l=8, r=8, t=40, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Inter, Segoe UI, sans-serif", size=13, color="#1F2430"),
-        title=dict(font=dict(size=15), x=0, xanchor="left"), showlegend=legenda,
+        font=dict(family="Arial, Helvetica, sans-serif", size=13, color="#0F2A33"),
+        title=dict(font=dict(size=15, family="Poppins, Arial, sans-serif", color="#0C6980"), x=0, xanchor="left"), showlegend=legenda,
         legend=dict(orientation="h", y=-0.15, x=0), hoverlabel=dict(bgcolor="white", font_size=13),
     )
     fig.update_xaxes(showgrid=False, zeroline=False, linecolor=CINZA_CLARO)
@@ -44,8 +44,9 @@ def style(fig: go.Figure, h=380, legenda=True):
 def cabecalho(titulo, pergunta=None):
     """Título da página. Dentro de uma aba (secoes/), mostra só a pergunta."""
     if not st.session_state.get("_em_aba"):
-        st.title(titulo)
-    if pergunta:
+        from core.tema import banner
+        banner(titulo, pergunta)
+    elif pergunta:
         st.caption(pergunta)
 
 
@@ -58,8 +59,8 @@ def abas(titulo, subtitulo, secoes):
     """Página com abas. secoes = [(rótulo, ícone, arquivo em secoes/)]."""
     import runpy
     from pathlib import Path
-    st.title(titulo)
-    st.caption(subtitulo)
+    from core.tema import banner
+    banner(titulo, subtitulo)
     tabs = st.tabs([f"{ic} {rot}" for rot, ic, _ in secoes])
     base = Path(__file__).resolve().parent.parent / "secoes"
     for tab, (_, _, arq) in zip(tabs, secoes):

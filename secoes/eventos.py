@@ -1,7 +1,8 @@
 import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
-from core.config import ROXO, VERDE, VERMELHO, CINZA, PERFIL_COR
+from core.config import TEAL, TEAL_L, AMARELO, AMARELO_L, TINTA, CINZA, CINZA_CLARO, VERDE, VERMELHO, PERFIL_COR
+from core.config import TEAL, VERDE, VERMELHO, CINZA, PERFIL_COR
 from core.data import get_dados, S
 from core.ui import brl, style, cabecalho, aviso_confianca, tabela
 
@@ -55,7 +56,7 @@ xs = ["Receita"] + list(desp.index) + ["Resultado"]
 ys = [r.receita] + [-v for v in desp.values] + [0]
 textos = [brl(r.receita)] + [brl(-v) for v in desp.values] + [brl(r.resultado)]
 w = go.Figure(go.Waterfall(x=xs, y=ys, measure=meas, connector=dict(line=dict(color="#D9DCE8")),
-                           increasing=dict(marker=dict(color=ROXO)), decreasing=dict(marker=dict(color="#B8BCCB")),
+                           increasing=dict(marker=dict(color=TEAL)), decreasing=dict(marker=dict(color=AMARELO)),
                            totals=dict(marker=dict(color=VERDE if r.resultado >= 0 else VERMELHO)),
                            text=textos, textposition="outside", hoverinfo="x+text"))
 w.update_layout(title=f"De onde veio e para onde foi o dinheiro: {nome}")
@@ -73,8 +74,8 @@ if fams:
     fam = st.selectbox("Evento", fams, index=fams.index("Festa Junina") if "Festa Junina" in fams else 0)
     g = ev[ev.familia == fam].sort_values("ano")
     fg = go.Figure()
-    fg.add_bar(x=g.ano.astype(str), y=g.receita, name="Receita", marker_color=ROXO)
-    fg.add_bar(x=g.ano.astype(str), y=g.despesa, name="Despesa", marker_color="#B8BCCB")
+    fg.add_bar(x=g.ano.astype(str), y=g.receita, name="Receita", marker_color=TEAL)
+    fg.add_bar(x=g.ano.astype(str), y=g.despesa, name="Despesa", marker_color=AMARELO)
     fg.update_layout(barmode="group", title=f"{fam}: receita e despesa por edição (R$)")
     st.plotly_chart(style(fg, 340), width="stretch")
     if len(g) >= 2:
