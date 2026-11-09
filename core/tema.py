@@ -30,6 +30,18 @@ h3::before {{ content:""; display:inline-block; width:8px; height:1.05em; backgr
 .hero .logo {{ position:absolute; right:30px; top:50%; transform:translateY(-50%); width:84px; height:84px; filter:drop-shadow(0 3px 6px rgba(0,0,0,.25)); }}
 .hero svg.deco {{ position:absolute; right:0; top:0; height:100%; opacity:.95; pointer-events:none; }}
 
+/* celular: tira as estrelas, reduz o banner e move o logo para cima do título */
+@media (max-width: 700px) {{
+  .hero {{ padding:18px 20px; border-radius:16px; }}
+  .hero svg.deco {{ display:none; }}
+  .hero {{ display:flex; flex-direction:column; }}
+  .hero .logo {{ order:-1; position:static; transform:none; display:block; width:52px; height:52px; margin:0 0 10px 0; }}
+  .hero h1 {{ font-size:1.55rem; }}
+  .hero p {{ max-width:100%; font-size:1rem; }}
+  .block-container {{ padding-left:1rem; padding-right:1rem; }}
+}}
+.modebar-container {{ display:none !important; }}
+
 /* cartões de métrica */
 [data-testid="stMetric"] {{ background:#fff; }}
 div[data-testid="stMetricValue"] {{ font-family:'Poppins',Arial,sans-serif; font-weight:700; color:var(--teal); font-size:1.75rem; }}
